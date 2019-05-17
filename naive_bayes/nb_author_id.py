@@ -35,8 +35,17 @@ print "prediction time:", round(time()-t1, 3), "s"
 
 accuracy = classifier.score(features_test, labels_test)
 
-print(accuracy)
+def NBAccuracy2(pred, labels_test):
+    accurate = [ii for ii in range(0, len(pred)) if pred[ii]==labels_test[ii]]
+    return len(accurate) * 1.0 / len(pred)
+
+def NBAccuracy3(pred, labels_test):
+    from sklearn.metrics import accuracy_score
+    return accuracy_score(pred, labels_test)
+
+accuracy2 = NBAccuracy2(pred, labels_test)
+accuracy3 = NBAccuracy3(pred, labels_test)
+
+print "accuracy:", accuracy, accuracy2, accuracy3
 
 #########################################################
-
-
