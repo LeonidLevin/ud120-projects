@@ -33,7 +33,9 @@ t1 = time()
 pred = classifier.predict(features_test)
 print "prediction time:", round(time()-t1, 3), "s"
 
+t2 = time()
 accuracy = classifier.score(features_test, labels_test)
+print "prediction and scoring time:", round(time()-t2, 3), "s"
 
 def NBAccuracy2(pred, labels_test):
     accurate = [ii for ii in range(0, len(pred)) if pred[ii]==labels_test[ii]]
