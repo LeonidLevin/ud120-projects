@@ -45,10 +45,12 @@ print "features:", len(features_train[0])
 print "accuracy on training set:", clf.score(features_train, labels_train)
 print "accuracy on testing set:", clf.score(features_test, labels_test)
 
-important_features = [(ii, clf.feature_importances_[ii]) for ii in range(0, len(clf.feature_importances_)) if clf.feature_importances_[ii] > 0.2]
+important_features = [(ii, clf.feature_importances_[ii]) for ii in range(0, len(clf.feature_importances_)) if clf.feature_importances_[ii] > 0.1]
 print important_features
 
-print "signagure word: ", vectorizer.get_feature_names()[important_features[0][0]]
+print "possible signature words and their importance: "
+for ii in range(0, len(important_features)):
+    print vectorizer.get_feature_names()[important_features[ii][0]], important_features[ii][1]
 
 
 
