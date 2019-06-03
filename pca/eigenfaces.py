@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
 ###############################################################################
 # Download the data, if not already on disk and load it as numpy arrays
-lfw_people = fetch_lfw_people(min_faces_per_person=70, resize=0.4)
+lfw_people = fetch_lfw_people(min_faces_per_person=50, resize=0.4)
 
 # introspect the images arrays to find the shapes (for plotting)
 n_samples, h, w = lfw_people.images.shape
@@ -66,7 +66,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random
 ###############################################################################
 # Compute a PCA (eigenfaces) on the face dataset (treated as unlabeled
 # dataset): unsupervised feature extraction / dimensionality reduction
-n_components = 150
+n_components = 111
 
 print "Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.shape[0])
 t0 = time()
@@ -90,7 +90,7 @@ print "done in %0.3fs" % (time() - t0)
 print "Fitting the classifier to the training set"
 t0 = time()
 param_grid = {
-         'C': [1e3, 5e3, 1e4, 5e4, 1e5],
+         'C': [1, 10, 1e2, 1e3, 5e3, 1e4, 5e4, 1e5],
           'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
           }
 # for sklearn version 0.16 or prior, the class_weight parameter value is 'auto'
@@ -116,14 +116,14 @@ print confusion_matrix(y_test, y_pred, labels=range(n_classes))
 ###############################################################################
 # Qualitative evaluation of the predictions using matplotlib
 
-def plot_gallery(images, titles, h, w, n_row=3, n_col=4):
+def plot_gallery(images, titles, h, w, n_row=3, n_col=5):
     """Helper function to plot a gallery of portraits"""
     pl.figure(figsize=(1.8 * n_col, 2.4 * n_row))
-    pl.subplots_adjust(bottom=0, left=.01, right=.99, top=.90, hspace=.35)
+    pl.subplots_adjust(bottom=0, left=.01, right=.99, top=.95, hspace=.15)
     for i in range(n_row * n_col):
         pl.subplot(n_row, n_col, i + 1)
         pl.imshow(images[i].reshape((h, w)), cmap=pl.cm.get_cmap('gray'))
-        pl.title(titles[i], size=12)
+        pl.title(titles[i], size=8)
         pl.xticks(())
         pl.yticks(())
 
@@ -133,16 +133,19 @@ def plot_gallery(images, titles, h, w, n_row=3, n_col=4):
 def title(y_pred, y_test, target_names, i):
     pred_name = target_names[y_pred[i]].rsplit(' ', 1)[-1]
     true_name = target_names[y_test[i]].rsplit(' ', 1)[-1]
-    return 'predicted: %s\ntrue:      %s' % (pred_name, true_name)
+    if (pred_name != true_name):
+      return '%s\n%s' % (pred_name, true_name)
+    else:
+      return '\n%s' % true_name
 
 prediction_titles = [title(y_pred, y_test, target_names, i)
                          for i in range(y_pred.shape[0])]
 
-plot_gallery(X_test, prediction_titles, h, w)
+plot_gallery(X_test, prediction_titles, h, w, 10, len(y_pred)/10)
 
 # plot the gallery of the most significative eigenfaces
 
 eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
-plot_gallery(eigenfaces, eigenface_titles, h, w)
+#plot_gallery(eigenfaces, eigenface_titles, h, w)
 
 pl.show()
