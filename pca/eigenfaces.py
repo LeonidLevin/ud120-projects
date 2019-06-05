@@ -30,6 +30,11 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
@@ -95,6 +100,10 @@ param_grid = {
           }
 # for sklearn version 0.16 or prior, the class_weight parameter value is 'auto'
 clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
+#clf = GaussianNB()
+#clf = GridSearchCV(RandomForestClassifier(), {'n_estimators': [10, 15, 20, 25, 30], 'min_samples_split': [2, 5, 10, 20, 30, 40, 50, 60, 70]})
+#clf = GridSearchCV(AdaBoostClassifier(), {'n_estimators': [25, 40, 50, 60, 75], 'learning_rate': [0.1, 0.2, 0.5, 1.0, 1.5, 2.0] })
+#clf = GridSearchCV(KNeighborsClassifier(), {'n_neighbors': [2, 5, 10, 15, 20, 30], 'weights': ['uniform', 'distance'] })
 clf = clf.fit(X_train_pca, y_train)
 print "done in %0.3fs" % (time() - t0)
 print "Best estimator found by grid search:"
