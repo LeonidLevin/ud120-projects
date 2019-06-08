@@ -100,7 +100,7 @@ param_grid = {
           }
 # for sklearn version 0.16 or prior, the class_weight parameter value is 'auto'
 clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
-#clf = GaussianNB()
+#clf = GridSearchCV(GaussianNB(), {'var_smoothing': [1e-9, 1e-6, 1e-3, 0.1]})
 #clf = GridSearchCV(RandomForestClassifier(), {'n_estimators': [10, 15, 20, 25, 30], 'min_samples_split': [2, 5, 10, 20, 30, 40, 50, 60, 70]})
 #clf = GridSearchCV(AdaBoostClassifier(), {'n_estimators': [25, 40, 50, 60, 75], 'learning_rate': [0.1, 0.2, 0.5, 1.0, 1.5, 2.0] })
 #clf = GridSearchCV(KNeighborsClassifier(), {'n_neighbors': [2, 5, 10, 15, 20, 30], 'weights': ['uniform', 'distance'] })
